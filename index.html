@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras Profesionales</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CalcPro">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Calculadoras especializadas para Ingenieros, Contadores y Economistas">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    
+    <!-- Chart.js para gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- jsPDF para exportar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <head>
+  <!-- Otros metadatos y estilos -->
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6367655589512265"
+     crossorigin="anonymous"></script>
+
+</head>
+</head>
+<body>
+    <header>
+        <h1>🎓 Calculadoras Profesionales</h1>
+        <p>Herramientas especializadas para Ingenieros, Contadores y Economistas</p>
+    </header>
+
+    <nav class="menu-principal">
+        <button class="btn-menu" data-area="ingenieria">🔧 Ingeniería</button>
+        <button class="btn-menu" data-area="contabilidad">📊 Contabilidad</button>
+        <button class="btn-menu" data-area="economia">💰 Economía</button>
+        <button class="btn-menu" data-area="historial">📋 Historial</button>
+    </nav>
+
+    <main id="contenedor-calculadoras">
+        <div class="bienvenida">
+            <h2>👋 Bienvenido</h2>
+            <p>Selecciona un área para comenzar a usar las calculadoras especializadas.</p>
+            <div style="margin-top: 2rem;">
+                <h3>✨ Características:</h3>
+                <ul style="text-align: left; display: inline-block; margin-top: 1rem;">
+                    <li>💾 Guarda tus cálculos en el historial</li>
+                    <li>📄 Exporta resultados a PDF</li>
+                    <li>📊 Visualiza gráficas interactivas</li>
+                    <li>📱 Diseño responsive para móviles</li>
+                    <li>🌙 Modo oscuro automático</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Botón flotante para historial -->
+    <button class="btn-historial-flotante" onclick="mostrarVistaHistorial()" title="Ver Historial">
+        📋
+    </button>
+    <!-- PWA Install & Service Worker -->
+    <script>
+    // Registrar Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('✅ Service Worker registrado:', registration.scope);
+          })
+          .catch(error => {
+            console.log('❌ Error al registrar Service Worker:', error);
+          });
+      });
+    }
+
+    // Botón de instalación PWA
+    let deferredPrompt;
+    const installButton = document.createElement('button');
+    installButton.className = 'btn-instalar-pwa';
+    installButton.innerHTML = '📱 Instalar App';
+    installButton.style.display = 'none';
+    document.body.appendChild(installButton);
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'block';
+      
+      setTimeout(() => {
+        if(typeof mostrarNotificacion === 'function') {
+          mostrarNotificacion('💡 ¡Puedes instalar esta app en tu dispositivo!');
+        }
+      }, 3000);
+    });
+
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+          if(typeof mostrarNotificacion === 'function') {
+            mostrarNotificacion('✅ ¡App instalada exitosamente!');
+          }
+          installButton.style.display = 'none';
+        }
+        
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      if(typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('✅ ¡App instalada! Ahora puedes usarla desde tu pantalla de inicio');
+      }
+      installButton.style.display = 'none';
+    });
+
+    // Detectar modo offline
+    window.addEventListener('online', () => {
+      if(typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('✅ Conexión restaurada');
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      if(typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('⚠️ Sin conexión - Modo offline activado', 'warning');
+      }
+    });
+    </script>
+    <!-- Scripts -->
+     <!-- Sistema de Temas -->
+    <script src="js/temas.js"></script>
+    <!-- Sistema de Dashboard -->
+    <script src="js/dashboard.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/graficas.js"></script>
+    <script src="js/historial.js"></script>
+    <script src="js/exportar-pdf.js"></script>
+    <script src="js/ingenieria.js"></script>
+    <script src="js/contabilidad.js"></script>
+    <script src="js/economia.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
