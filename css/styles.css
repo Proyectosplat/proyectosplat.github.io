@@ -1332,3 +1332,43 @@ header {
 .stat-card:nth-child(2) { animation-delay: 0.2s; }
 .stat-card:nth-child(3) { animation-delay: 0.3s; }
 .stat-card:nth-child(4) { animation-delay: 0.4s; }
+/* Footer Legal */
+.footer-legal {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 3rem;
+    border-top: 2px solid #e0e0e0;
+}
+
+.footer-legal p {
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    margin-top: 0.5rem;
+}
+
+.footer-links a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #5568d3;
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .footer-legal {
+        padding: 1rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.8rem;
+    }
+}
